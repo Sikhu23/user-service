@@ -17,6 +17,11 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @GetMapping("/users")
+    public ResponseEntity<List<User>> showAllUsers(){
+        return  new ResponseEntity<>(userService.showAllUsers(), HttpStatus.ACCEPTED);
+    }
+
 
 
 }
