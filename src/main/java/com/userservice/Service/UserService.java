@@ -14,6 +14,13 @@ public class UserService {
     @Autowired
     private UserRepo userRepo;
 
+    public User findByID(String userId){
+        return this.userRepo.findById(userId).get();
+
+    }
+
+
+
 
     public  User saveUser(User user){
         return this.userRepo.save(user);
