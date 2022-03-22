@@ -28,6 +28,13 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+
+    @GetMapping("/users")
+    public ResponseEntity<List<User>> showAllUsers(){
+        return  new ResponseEntity<>(userService.showAllUsers(), HttpStatus.ACCEPTED);
+    }
+
+
     @GetMapping("/users/{userId}")
     public ResponseEntity<User> findByID(@PathVariable("userId") String userId){
         return new ResponseEntity<>(userService.findByID(userId),HttpStatus.ACCEPTED);
@@ -44,6 +51,7 @@ public class UserController {
     public ResponseEntity<User> changeDetails(@Valid @RequestBody User user, @PathVariable("userId")  String userId) throws Exception {
         return new ResponseEntity<>(userService.changeDetails(user,userId),HttpStatus.ACCEPTED);
     }
+
 
 
 
