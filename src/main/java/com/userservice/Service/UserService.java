@@ -14,6 +14,15 @@ public class UserService {
     @Autowired
     private UserRepo userRepo;
 
+    public User changeDetails(User user,String userId) throws Exception {
+        if(userRepo.findById(userId).isPresent()){
+            return this.userRepo.save(user);
+        }
+        else{
+            throw new Exception("ID doesnot Exist");
+        }
+    }
+
 
 
 }
