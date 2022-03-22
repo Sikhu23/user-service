@@ -4,6 +4,8 @@ package com.userservice.Service;
 import com.userservice.Model.User;
 import com.userservice.Repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,8 +17,11 @@ public class UserService {
     private UserRepo userRepo;
 
 
-    public List<User> showAllUsers() {
-        return this.userRepo.findAll();
+    public List<User> showAllUsers(int page,int pageSize) {
+        Pageable firstPage = PageRequest.of(page, pageSize);
+        List<User> allUsers=  userRepo.findAll(firstPage).toList();
+        return  allUsers;
+
     }
 
     public User findByID(String userId){

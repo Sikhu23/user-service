@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import javax.validation.Valid;
+import javax.ws.rs.QueryParam;
 import java.util.List;
 
 @RestController
@@ -37,8 +38,8 @@ public class UserController {
 
 
     @GetMapping("/users")
-    public ResponseEntity<List<User>> showAllUsers(){
-        return  new ResponseEntity<>(userService.showAllUsers(), HttpStatus.ACCEPTED);
+    public ResponseEntity<List<User>> showAllUsers(@QueryParam("page") int page,@QueryParam("pageSize") int pageSize){
+        return  new ResponseEntity<>(userService.showAllUsers(page,pageSize), HttpStatus.ACCEPTED);
     }
 
 
