@@ -39,6 +39,10 @@ public class UserService {
 
     }
 
-
+            public String deleteUserById(String userId){
+                userRepo.deleteById(userId);
+                return "User Deleted Successfully";
+            }
 
 }
+
