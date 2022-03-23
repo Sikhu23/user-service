@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import javax.validation.Valid;
+import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 import java.util.List;
 
@@ -69,6 +70,12 @@ public class UserController {
     public ResponseEntity<String> deleteUserById(@PathVariable("userId") String userId){
         return new ResponseEntity<>(userService.deleteUserById(userId),HttpStatus.ACCEPTED);
     }
+
+    @GetMapping("/email/{emailId}")
+    public ResponseEntity<UserDTO> userByEmail(@PathVariable("emailId") String emailId){
+        return new ResponseEntity<>(userService.userByEmail(emailId),HttpStatus.ACCEPTED);
+    }
+
 
 
     }

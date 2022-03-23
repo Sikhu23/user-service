@@ -71,6 +71,20 @@ public class UserService {
 
     }
 
+    public UserDTO userByEmail(String email){
+        try{
+            User user = userRepo.findByemail(email);
+            UserDTO userDTO = new UserDTO(user.getUserID(),user.getFirstName(),user.getMiddleName(),
+                    user.getLastName(),user.getPhoneNumber(),user.getDateOfBirth(),user.getGender(),
+                    user.getAddress(),user.getEmployeeNumber(),user.getBloodGroup(),user.getEmail());
+
+            return  userDTO;
+        }
+        catch(Exception e){
+            throw new UserNotFoundException("User Doesnot Exists");
+        }
+    }
+
 
 
 
