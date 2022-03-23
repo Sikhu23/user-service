@@ -5,20 +5,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.Optional;
 
 
-@Document(collection = "User")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @ToString
-public class User {
-
+public class UserDTO {
     @Id
     private String userID;
 
@@ -52,10 +51,6 @@ public class User {
 
     @NotEmpty(message = "Email is required")
     private String email;
-
-    @NotEmpty(message = "Password is required")
-    private String password;
-
 
 
 

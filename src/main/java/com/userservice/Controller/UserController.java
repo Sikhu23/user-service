@@ -2,6 +2,7 @@ package com.userservice.Controller;
 
 
 import com.userservice.Model.User;
+import com.userservice.Model.UserDTO;
 import com.userservice.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,14 +39,14 @@ public class UserController {
 
 
     @GetMapping("/users")
-    public ResponseEntity<List<User>> showAllUsers(@QueryParam("page") int page,@QueryParam("pageSize") int pageSize){
+    public ResponseEntity<List<UserDTO>> showAllUsers(@QueryParam("page") Integer page,@QueryParam("pageSize") Integer pageSize){
         return  new ResponseEntity<>(userService.showAllUsers(page,pageSize), HttpStatus.ACCEPTED);
     }
 
 
 
     @GetMapping("/users/{userId}")
-    public ResponseEntity<User> findByID(@PathVariable("userId") String userId){
+    public ResponseEntity<UserDTO> findByID(@PathVariable("userId") String userId){
         return new ResponseEntity<>(userService.findByID(userId),HttpStatus.ACCEPTED);
     }
 
