@@ -1,6 +1,8 @@
 package com.userservice.Service;
 
 
+import com.userservice.Const.ConstantFile;
+import com.userservice.Exception.EmailAlreadyExistsException;
 import com.userservice.Exception.UserNotFoundException;
 import com.userservice.Model.User;
 import com.userservice.Model.UserDTO;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -35,8 +38,8 @@ public class UserService {
         List<UserDTO> allUsersDTO=new ArrayList<>();
         for(User user:allUsers){
             UserDTO userDTO=new UserDTO(user.getUserID(),user.getFirstName(),user.getMiddleName(),
-                    user.getLastName(),user.getPhoneNumber(),user.getDateOfBirth(),user.getGender(),
-                    user.getAddress(),user.getEmployeeNumber(),user.getBloodGroup(),user.getEmail());
+                    user.getLastName(),user.getPhoneNumber(),user.getDateOfBirth(),user.getGender().toString(),
+                    user.getAddress(),user.getEmployeeNumber(),user.getBloodGroup().toString(),user.getEmail());
 
             allUsersDTO.add(userDTO);
 
@@ -59,29 +62,26 @@ public class UserService {
             userDTO.setAddress(user.getAddress());
             userDTO.setDateOfBirth(user.getDateOfBirth());
             userDTO.setEmployeeNumber(user.getEmployeeNumber());
-            userDTO.setBloodGroup(user.getBloodGroup());
-            userDTO.setGender(user.getGender());
+            userDTO.setBloodGroup(user.getBloodGroup().toString());
+            userDTO.setGender(user.getGender().toString());
             return  userDTO;
         }
 
         catch(Exception e){
-            throw new UserNotFoundException("User Not Found");
+            throw new UserNotFoundException(ConstantFile.errorCode);
         }
 
 
     }
 
-    public UserDTO userByEmail(String email){
-        try{
-            User user = userRepo.findByemail(email);
-            UserDTO userDTO = new UserDTO(user.getUserID(),user.getFirstName(),user.getMiddleName(),
-                    user.getLastName(),user.getPhoneNumber(),user.getDateOfBirth(),user.getGender(),
-                    user.getAddress(),user.getEmployeeNumber(),user.getBloodGroup(),user.getEmail());
+    public User userByEmail(String email){
+       if(userRepo.findByemail(email)!=null){
+            return userRepo.findByemail(email);
 
-            return  userDTO;
+
         }
-        catch(Exception e){
-            throw new UserNotFoundException("User Doesnot Exists");
+        else{
+            throw new UserNotFoundException(ConstantFile.errorCode);
         }
     }
 
@@ -89,16 +89,27 @@ public class UserService {
 
 
     public  User saveUser(User user) {
+        User user1 = this.userRepo.findByemail(user.getEmail());
+        if(user1!=null){
+            throw new EmailAlreadyExistsException(ConstantFile.errorCodeEmail);
+
+        }
         return this.userRepo.save(user);
     }
 
     public User changeDetails(User user,String userId) throws Exception {
         if(userRepo.findById(userId).isPresent()){
+
+            User user1 = this.userRepo.findByemail(user.getEmail());
+            if(user1!=null && user1.getUserID()!=userId){
+                throw new EmailAlreadyExistsException(ConstantFile.errorCodeEmail);
+
+            }
             user.setUserID(userId);
             return this.userRepo.save(user);
         }
         else{
-            throw new UserNotFoundException("User Not Found");
+            throw new UserNotFoundException(ConstantFile.errorCode);
         }
 
     }
@@ -107,10 +118,10 @@ public class UserService {
                 if(userRepo.findById(userId).isPresent()){
 
                     userRepo.deleteById(userId);
-                    return "User  Successfully Deleted";
+                    return ConstantFile.successDelete;
                 }
                 else{
-                    throw new UserNotFoundException("User Not Found");
+                    throw new UserNotFoundException(ConstantFile.errorCode);
                 }
 
             }

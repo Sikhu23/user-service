@@ -22,13 +22,21 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 class UserServiceExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler({UserNotFoundException.class})
+    @ExceptionHandler({UserNotFoundException.class,EmailAlreadyExistsException.class})
     ResponseEntity customerNotFoundHandler(Exception exception, ServletWebRequest request){
         ApiError apiError = new ApiError();
         apiError.setMessage(exception.getMessage());
         apiError.setCode("404");
         return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
     }
+
+
+
+
+
+
+
+
 
 
 

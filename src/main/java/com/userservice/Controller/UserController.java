@@ -13,9 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 
-import org.springframework.web.bind.annotation.GetMapping;
-
-import org.springframework.web.bind.annotation.PathVariable;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import javax.validation.Valid;
-import javax.ws.rs.Path;
+
 import javax.ws.rs.QueryParam;
 import java.util.List;
 
@@ -72,7 +69,7 @@ public class UserController {
     }
 
     @GetMapping("/getUserByEmail/{emailId}")
-    public ResponseEntity<UserDTO> userByEmail(@PathVariable("emailId") String emailId){
+    public ResponseEntity<User> userByEmail(@PathVariable("emailId") String emailId){
         return new ResponseEntity<>(userService.userByEmail(emailId),HttpStatus.ACCEPTED);
     }
 
