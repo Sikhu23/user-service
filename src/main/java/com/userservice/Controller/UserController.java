@@ -31,6 +31,7 @@ import javax.ws.rs.QueryParam;
 import java.util.List;
 
 @RestController
+@RequestMapping("/users")
 public class UserController {
 
     @Autowired
@@ -38,33 +39,33 @@ public class UserController {
 
 
 
-    @GetMapping("/users")
+    @GetMapping()
     public ResponseEntity<List<UserDTO>> showAllUsers(@QueryParam("page") Integer page,@QueryParam("pageSize") Integer pageSize){
         return  new ResponseEntity<>(userService.showAllUsers(page,pageSize), HttpStatus.ACCEPTED);
     }
 
 
 
-    @GetMapping("/users/{userId}")
+    @GetMapping("/{userId}")
     public ResponseEntity<UserDTO> findByID(@PathVariable("userId") String userId){
         return new ResponseEntity<>(userService.findByID(userId),HttpStatus.ACCEPTED);
     }
 
 
-    @PostMapping("/users")
+    @PostMapping()
     public ResponseEntity<User> saveUser(@RequestBody @Valid User user){
         return new ResponseEntity<>(userService.saveUser(user),HttpStatus.ACCEPTED);
     }
 
 
-    @PutMapping("/users/{userId}")
+    @PutMapping("/{userId}")
     public ResponseEntity<User> changeDetails(@Valid @RequestBody User user, @PathVariable("userId")  String userId) throws Exception {
         return new ResponseEntity<>(userService.changeDetails(user,userId),HttpStatus.ACCEPTED);
     }
 
 
 
-    @DeleteMapping("/users/{userId}")
+    @DeleteMapping("/{userId}")
     public ResponseEntity<String> deleteUserById(@PathVariable("userId") String userId){
         return new ResponseEntity<>(userService.deleteUserById(userId),HttpStatus.ACCEPTED);
     }
