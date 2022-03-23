@@ -71,7 +71,7 @@ public class UserController {
         return new ResponseEntity<>(userService.deleteUserById(userId),HttpStatus.ACCEPTED);
     }
 
-    @GetMapping("/email/{emailId}")
+    @GetMapping("/getUserByEmail/{emailId}")
     public ResponseEntity<UserDTO> userByEmail(@PathVariable("emailId") String emailId){
         return new ResponseEntity<>(userService.userByEmail(emailId),HttpStatus.ACCEPTED);
     }
