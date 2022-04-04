@@ -1,7 +1,10 @@
 package com.userservice.Const;
 
 public class ConstantFile {
-    public final static String errorCode="User Not Found";
-    public final static String errorCodeEmail="Email Already Exists";
-    public final static String successDelete="User  Successfully Deleted";
+    public static final  String ERRORCODE="User Not Found";
+    public static  final  String ERRORCODEEMAIL="Email Already Exists";
+    public static final  String SUCCESSDELETE="User  Successfully Deleted";
+    private ConstantFile(){
+        throw new IllegalStateException();
+    }
 }

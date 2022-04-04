@@ -14,7 +14,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+
+
 
 @Service
 public class UserService {
@@ -51,6 +52,7 @@ public class UserService {
     public UserDTO findByID(String userId){
 
         try{
+
             User user=this.userRepo.findById(userId).get();
             UserDTO userDTO=new UserDTO();
             userDTO.setUserID(user.getUserID());
@@ -68,7 +70,7 @@ public class UserService {
         }
 
         catch(Exception e){
-            throw new UserNotFoundException(ConstantFile.errorCode);
+            throw new UserNotFoundException(ConstantFile.ERRORCODE);
         }
 
 
@@ -81,7 +83,7 @@ public class UserService {
 
         }
         else{
-            throw new UserNotFoundException(ConstantFile.errorCode);
+            throw new UserNotFoundException(ConstantFile.ERRORCODE);
         }
     }
 
@@ -91,25 +93,25 @@ public class UserService {
     public  User saveUser(User user) {
         User user1 = this.userRepo.findByemail(user.getEmail());
         if(user1!=null){
-            throw new EmailAlreadyExistsException(ConstantFile.errorCodeEmail);
+            throw new EmailAlreadyExistsException(ConstantFile.ERRORCODEEMAIL);
 
         }
         return this.userRepo.save(user);
     }
 
-    public User changeDetails(User user,String userId) throws Exception {
+    public User changeDetails(User user,String userId)  {
         if(userRepo.findById(userId).isPresent()){
 
             User user1 = this.userRepo.findByemail(user.getEmail());
-            if(user1!=null && user1.getUserID()!=userId){
-                throw new EmailAlreadyExistsException(ConstantFile.errorCodeEmail);
+            if(user1!=null && user1.getUserID().equals(userId)){
+                throw new EmailAlreadyExistsException(ConstantFile.ERRORCODEEMAIL);
 
             }
             user.setUserID(userId);
             return this.userRepo.save(user);
         }
         else{
-            throw new UserNotFoundException(ConstantFile.errorCode);
+            throw new UserNotFoundException(ConstantFile.ERRORCODE);
         }
 
     }
@@ -118,10 +120,10 @@ public class UserService {
                 if(userRepo.findById(userId).isPresent()){
 
                     userRepo.deleteById(userId);
-                    return ConstantFile.successDelete;
+                    return ConstantFile.SUCCESSDELETE;
                 }
                 else{
-                    throw new UserNotFoundException(ConstantFile.errorCode);
+                    throw new UserNotFoundException(ConstantFile.ERRORCODE);
                 }
 
             }
