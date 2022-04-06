@@ -22,6 +22,8 @@ import org.springframework.test.web.servlet.ResultMatcher;
 
 import javax.ws.rs.core.MediaType;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -31,6 +33,7 @@ import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -57,11 +60,23 @@ class UserControllerTest {
     private static  User createOneUser(){
 
 
-        User user= new User(null,"Natsu","Igneel",
+        User user= new User("1","Natsu","Igneel",
                 "Dragneel","9710532160",new Date(2022-03-21), Gender.MALE,
                 "Bhilai","123",
                 BloodGroup.A_POS,"qw@ex.com","123");
         return user;
+    }
+
+    private static  UserDTO createOneUserDto() throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date c= sdf.parse("2015-05-26");
+
+
+        UserDTO userdto= new UserDTO("1","Natsu","Igneel",
+                "Dragneel","9710532160",c, "MALE",
+                "Bhilai","123",
+                "A+","qw@ex.com");
+        return userdto;
     }
 
     private static  List<User> createListUser(){
@@ -114,23 +129,18 @@ class UserControllerTest {
     }
 
     @Test
-    void findByID() {
+    void findByID() throws Exception {
+
+        UserDTO userDTO = createOneUserDto();
+        Mockito.when(userService.findByID("1")).thenReturn(userDTO);
+        mockMvc.perform(get("/users/1"))
+                .andDo(print())
+                .andExpect(status().isAccepted())
+                .andExpect(jsonPath("$",Matchers.aMapWithSize(11)))
+                .andExpect(jsonPath("$.firstName",Matchers.is("Natsu")));
     }
 
-    @Test
-    void saveUser() throws Exception {
-        User user = createOneUser();
 
-
-        Mockito.when(userService.saveUser(user)).thenReturn(user);
-        mockMvc.perform(post("/users")
-                .content(asJsonString(user))
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isAccepted());
-
-
-    }
 
 
 
@@ -139,10 +149,27 @@ class UserControllerTest {
     }
 
     @Test
-    void deleteUserById() {
+    void deleteUserById() throws Exception {
+//        User user =createOneUser();
+        UserDTO userDTO=createOneUserDto();
+        System.out.println("Date "+userDTO.getDateOfBirth());
+//        Mockito.when(userService.deleteUserById("1")).thenReturn("Deleted Succcessfully");
+        Mockito.when(userService.findByID("3")).thenReturn(userDTO);
+//        Mockito.when(userService.saveUser(user)).thenReturn(user);
+
+        mockMvc.perform(delete("/users/2"))
+                .andDo(print())
+                .andExpect(status().isAccepted());
     }
 
     @Test
-    void userByEmail() {
+    void userByEmail() throws Exception {
+        User user = createOneUser();
+        Mockito.when(userService.userByEmail("qw@ex.com")).thenReturn(user);
+        mockMvc.perform(get("/users/getUserByEmail/qw@ex.com"))
+                .andDo(print())
+                .andExpect(status().isAccepted())
+                .andExpect(jsonPath("$",Matchers.aMapWithSize(12)))
+                .andExpect(jsonPath("$.email",Matchers.is("qw@ex.com")));
     }
 }

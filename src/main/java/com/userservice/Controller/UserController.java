@@ -51,13 +51,13 @@ public class UserController {
 
 
     @PostMapping()
-    public ResponseEntity<User> saveUser(@RequestBody @Valid User user){
+    public ResponseEntity<UserDTO> saveUser(@RequestBody @Valid User user){
         return new ResponseEntity<>(userService.saveUser(user),HttpStatus.ACCEPTED);
     }
 
 
     @PutMapping("/{userId}")
-    public ResponseEntity<User> changeDetails(@Valid @RequestBody User user, @PathVariable("userId")  String userId) throws Exception {
+    public ResponseEntity<UserDTO> changeDetails(@Valid @RequestBody User user, @PathVariable("userId")  String userId) throws Exception {
         return new ResponseEntity<>(userService.changeDetails(user,userId),HttpStatus.ACCEPTED);
     }
 

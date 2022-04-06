@@ -7,7 +7,8 @@ public enum BloodGroup {
     B_POS,
     B_NEG,
     O_POS,
-    O_NEG
+    O_NEG,
+
 
 
 }
