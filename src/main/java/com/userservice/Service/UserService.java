@@ -2,7 +2,9 @@ package com.userservice.Service;
 
 
 import com.userservice.Const.ConstantFile;
+import com.userservice.Enum.BloodGroup;
 import com.userservice.Exception.EmailAlreadyExistsException;
+import com.userservice.Exception.EnumException;
 import com.userservice.Exception.UserIdExistsException;
 import com.userservice.Exception.UserNotFoundException;
 import com.userservice.Model.User;
@@ -93,69 +95,63 @@ public class UserService {
 
 
     public  UserDTO saveUser(User user) {
-        User user1 = this.userRepo.findByemail(user.getEmail());
-        if(user1!=null){
-            throw new EmailAlreadyExistsException(ConstantFile.ERRORCODEEMAIL);
+        boolean flag=false;
+        String bg = user.getBloodGroup();
+        BloodGroup[] bgs= BloodGroup.values();
+        for(BloodGroup bloodGroup:bgs){
+            if(String.valueOf(bloodGroup.getGroup()).equals(bg)){
+                flag=true;
+                break;
 
+            }
         }
-        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-         this.userRepo.save(user);
-        UserDTO userDTO=new UserDTO();
-        userDTO.setUserID(user.getUserID());
-        userDTO.setFirstName(user.getFirstName());
-        userDTO.setLastName(user.getLastName());
-        userDTO.setMiddleName(user.getMiddleName());
-        userDTO.setPhoneNumber(user.getPhoneNumber());
-        userDTO.setEmail(user.getEmail());
-        userDTO.setAddress(user.getAddress());
-        userDTO.setDateOfBirth(user.getDateOfBirth());
-        userDTO.setEmployeeNumber(user.getEmployeeNumber());
-        userDTO.setBloodGroup(user.getBloodGroup().toString());
-        userDTO.setGender(user.getGender().toString());
-        return  userDTO;
+        System.out.println(flag+" "+bg);
+if(flag){
+
+    User user1 = this.userRepo.findByemail(user.getEmail());
+    if(user1!=null){
+        throw new EmailAlreadyExistsException(ConstantFile.ERRORCODEEMAIL);
+
+    }
+    user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+    this.userRepo.save(user);
+    UserDTO userDTO=new UserDTO();
+    userDTO.setUserID(user.getUserID());
+    userDTO.setFirstName(user.getFirstName());
+    userDTO.setLastName(user.getLastName());
+    userDTO.setMiddleName(user.getMiddleName());
+    userDTO.setPhoneNumber(user.getPhoneNumber());
+    userDTO.setEmail(user.getEmail());
+    userDTO.setAddress(user.getAddress());
+    userDTO.setDateOfBirth(user.getDateOfBirth());
+    userDTO.setEmployeeNumber(user.getEmployeeNumber());
+    userDTO.setBloodGroup(user.getBloodGroup().toString());
+    userDTO.setGender(user.getGender().toString());
+    return  userDTO;
+}
+
+else{
+    throw new EnumException("Blood Group is enum type and cant have value: "+user.getBloodGroup());
+}
     }
 
     public UserDTO changeDetails(User user,String userId)  {
-        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
 
-        if(user.getUserID()==null || user.getUserID().equals(userId)) {
-            if (userRepo.findById(userId).isPresent()) {
+        boolean flag=false;
+        String bg = user.getBloodGroup();
+        BloodGroup[] bgs= BloodGroup.values();
+        for(BloodGroup bloodGroup:bgs){
+            if(String.valueOf(bloodGroup.getGroup()).equals(bg)){
+                flag=true;
+                break;
 
-                User user1 = this.userRepo.findByemail(user.getEmail());
-                if (user1 != null && !user1.getUserID().equals(userId)) {
-                    throw new EmailAlreadyExistsException(ConstantFile.ERRORCODEEMAIL);
-
-                }
-                user.setUserID(userId);
-
-                this.userRepo.save(user);
-                UserDTO userDTO=new UserDTO();
-                userDTO.setUserID(user.getUserID());
-                userDTO.setFirstName(user.getFirstName());
-                userDTO.setLastName(user.getLastName());
-                userDTO.setMiddleName(user.getMiddleName());
-                userDTO.setPhoneNumber(user.getPhoneNumber());
-                userDTO.setEmail(user.getEmail());
-                userDTO.setAddress(user.getAddress());
-                userDTO.setDateOfBirth(user.getDateOfBirth());
-                userDTO.setEmployeeNumber(user.getEmployeeNumber());
-                userDTO.setBloodGroup(user.getBloodGroup().toString());
-                userDTO.setGender(user.getGender().toString());
-                return  userDTO;
-            } else {
-                throw new UserNotFoundException(ConstantFile.ERRORCODE);
             }
         }
-        else{
-            if(userRepo.findById(user.getUserID()).isPresent() && userRepo.findById(userId).isPresent()){
-                throw new UserIdExistsException("User ID already exists, " +
-                        "please give non existing user id or leave it empty");
+        if(flag){
 
-            }
-            else if(userRepo.findById(user.getUserID()).isPresent() && !userRepo.findById(userId).isPresent()){
-                throw new UserNotFoundException(ConstantFile.ERRORCODE);
-            }
-            else{
+            user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+
+            if(user.getUserID()==null || user.getUserID().equals(userId)) {
                 if (userRepo.findById(userId).isPresent()) {
 
                     User user1 = this.userRepo.findByemail(user.getEmail());
@@ -163,9 +159,9 @@ public class UserService {
                         throw new EmailAlreadyExistsException(ConstantFile.ERRORCODEEMAIL);
 
                     }
-                    user.setUserID(user.getUserID());
-                    userRepo.deleteById(userId);
-                     this.userRepo.save(user);
+                    user.setUserID(userId);
+
+                    this.userRepo.save(user);
                     UserDTO userDTO=new UserDTO();
                     userDTO.setUserID(user.getUserID());
                     userDTO.setFirstName(user.getFirstName());
@@ -183,6 +179,47 @@ public class UserService {
                     throw new UserNotFoundException(ConstantFile.ERRORCODE);
                 }
             }
+            else{
+                if(userRepo.findById(user.getUserID()).isPresent() && userRepo.findById(userId).isPresent()){
+                    throw new UserIdExistsException("User ID already exists, " +
+                            "please give non existing user id or leave it empty");
+
+                }
+                else if(userRepo.findById(user.getUserID()).isPresent() && !userRepo.findById(userId).isPresent()){
+                    throw new UserNotFoundException(ConstantFile.ERRORCODE);
+                }
+                else{
+                    if (userRepo.findById(userId).isPresent()) {
+
+                        User user1 = this.userRepo.findByemail(user.getEmail());
+                        if (user1 != null && !user1.getUserID().equals(userId)) {
+                            throw new EmailAlreadyExistsException(ConstantFile.ERRORCODEEMAIL);
+
+                        }
+                        user.setUserID(user.getUserID());
+                        userRepo.deleteById(userId);
+                        this.userRepo.save(user);
+                        UserDTO userDTO=new UserDTO();
+                        userDTO.setUserID(user.getUserID());
+                        userDTO.setFirstName(user.getFirstName());
+                        userDTO.setLastName(user.getLastName());
+                        userDTO.setMiddleName(user.getMiddleName());
+                        userDTO.setPhoneNumber(user.getPhoneNumber());
+                        userDTO.setEmail(user.getEmail());
+                        userDTO.setAddress(user.getAddress());
+                        userDTO.setDateOfBirth(user.getDateOfBirth());
+                        userDTO.setEmployeeNumber(user.getEmployeeNumber());
+                        userDTO.setBloodGroup(user.getBloodGroup().toString());
+                        userDTO.setGender(user.getGender().toString());
+                        return  userDTO;
+                    } else {
+                        throw new UserNotFoundException(ConstantFile.ERRORCODE);
+                    }
+                }
+            }
+        }
+        else{
+            throw new EnumException("Blood Group is enum type and cant have value: "+user.getBloodGroup());
         }
     }
 

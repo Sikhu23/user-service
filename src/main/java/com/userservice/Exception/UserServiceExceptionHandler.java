@@ -29,7 +29,7 @@ class UserServiceExceptionHandler extends ResponseEntityExceptionHandler {
 
 
     @ExceptionHandler({UserNotFoundException.class,
-            EmailAlreadyExistsException.class,UserIdExistsException.class})
+            EmailAlreadyExistsException.class,UserIdExistsException.class,EnumException.class})
     ResponseEntity customerNotFoundHandler(Exception exception, ServletWebRequest request){
         ApiError apiError = new ApiError();
         apiError.setMessage(exception.getMessage());

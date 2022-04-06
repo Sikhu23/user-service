@@ -50,7 +50,8 @@ public class User {
     private String employeeNumber;
 
     @NotNull(message = "Blood Group is required")
-    private BloodGroup bloodGroup;
+    private String  bloodGroup;
+
 
     @NotEmpty(message = "Email is required")
     private String email;

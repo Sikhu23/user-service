@@ -63,7 +63,7 @@ class UserControllerTest {
         User user= new User("1","Natsu","Igneel",
                 "Dragneel","9710532160",new Date(2022-03-21), Gender.MALE,
                 "Bhilai","123",
-                BloodGroup.A_POS,"qw@ex.com","123");
+                "A+","qw@ex.com","123");
         return user;
     }
 
@@ -85,11 +85,11 @@ class UserControllerTest {
         User user= new User(null,"Natsu","Igneel",
                 "Dragneel","9710532160",new Date(2022-03-21), Gender.MALE,
                 "Bhilai","123",
-                BloodGroup.A_POS,"qw@ex.com","123");
+                "A+","qw@ex.com","123");
         User user1= new User(null,"Natsu","Igneel",
                 "Dragneel","9710532160",new Date(2022-03-21), Gender.MALE,
                 "Bhilai","123",
-                BloodGroup.A_POS,"qw1@ex.com","123");
+                "A+","qw1@ex.com","123");
         users.add(user);
         users.add(user1);
         return users;
