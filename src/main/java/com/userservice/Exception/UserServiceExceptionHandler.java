@@ -1,7 +1,7 @@
 package com.userservice.Exception;
 
 
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+
 import com.userservice.Model.ApiError;
 
 import org.springframework.http.HttpHeaders;
@@ -17,6 +17,7 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,7 +31,7 @@ class UserServiceExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({UserNotFoundException.class,
             EmailAlreadyExistsException.class,UserIdExistsException.class,EnumException.class})
-    ResponseEntity customerNotFoundHandler(Exception exception, ServletWebRequest request){
+    ResponseEntity<Object> customerNotFoundHandler(Exception exception, ServletWebRequest request){
         ApiError apiError = new ApiError();
         apiError.setMessage(exception.getMessage());
         apiError.setCode("404");
@@ -51,7 +52,7 @@ class UserServiceExceptionHandler extends ResponseEntityExceptionHandler {
             apiError.setMessage("Gender is Enum type and cannot have Dynamic values");
         }
 
-//        apiError.setMessage(ex.getLocalizedMessage().substring(73,79)+ " cannot have dynamic values");
+
 
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
 

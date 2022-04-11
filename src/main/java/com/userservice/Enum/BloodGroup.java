@@ -16,15 +16,7 @@ public enum BloodGroup implements Serializable {
         return this.group;
     }
 
-//    public static BloodGroup getBloodGroup(String group) {
-//        for (BloodGroup bloodGrp : BloodGroup.values()) {
-//            if (bloodGrp.getGroup().equalsIgnoreCase(group)) {
-//                return bloodGrp;
-//            }
-//        }
-//        throw new RuntimeException();
-//
-//    }
+
 
 
 }

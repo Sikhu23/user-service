@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Optional;
 
 
 @Service
@@ -44,7 +44,7 @@ public class UserService {
         for(User user:allUsers){
             UserDTO userDTO=new UserDTO(user.getUserID(),user.getFirstName(),user.getMiddleName(),
                     user.getLastName(),user.getPhoneNumber(),user.getDateOfBirth(),user.getGender().toString(),
-                    user.getAddress(),user.getEmployeeNumber(),user.getBloodGroup().toString(),user.getEmail());
+                    user.getAddress(),user.getEmployeeNumber(),user.getBloodGroup(),user.getEmail());
 
             allUsersDTO.add(userDTO);
 
@@ -56,21 +56,28 @@ public class UserService {
     public UserDTO findByID(String userId){
 
         try{
+            Optional<User> optionalUser=this.userRepo.findById(userId);
+            if(optionalUser.isPresent()){
 
-            User user=this.userRepo.findById(userId).get();
-            UserDTO userDTO=new UserDTO();
-            userDTO.setUserID(user.getUserID());
-            userDTO.setFirstName(user.getFirstName());
-            userDTO.setLastName(user.getLastName());
-            userDTO.setMiddleName(user.getMiddleName());
-            userDTO.setPhoneNumber(user.getPhoneNumber());
-            userDTO.setEmail(user.getEmail());
-            userDTO.setAddress(user.getAddress());
-            userDTO.setDateOfBirth(user.getDateOfBirth());
-            userDTO.setEmployeeNumber(user.getEmployeeNumber());
-            userDTO.setBloodGroup(user.getBloodGroup().toString());
-            userDTO.setGender(user.getGender().toString());
-            return  userDTO;
+                User user=optionalUser.get();
+                UserDTO userDTO=new UserDTO();
+                userDTO.setUserID(user.getUserID());
+                userDTO.setFirstName(user.getFirstName());
+                userDTO.setLastName(user.getLastName());
+                userDTO.setMiddleName(user.getMiddleName());
+                userDTO.setPhoneNumber(user.getPhoneNumber());
+                userDTO.setEmail(user.getEmail());
+                userDTO.setAddress(user.getAddress());
+                userDTO.setDateOfBirth(user.getDateOfBirth());
+                userDTO.setEmployeeNumber(user.getEmployeeNumber());
+                userDTO.setBloodGroup(user.getBloodGroup());
+                userDTO.setGender(user.getGender().toString());
+                return  userDTO;
+            }
+            else{
+                throw new UserNotFoundException(ConstantFile.ERRORCODE);
+            }
+
         }
 
         catch(Exception e){
@@ -105,7 +112,7 @@ public class UserService {
 
             }
         }
-        System.out.println(flag+" "+bg);
+
 if(flag){
 
     User user1 = this.userRepo.findByemail(user.getEmail());
@@ -125,7 +132,7 @@ if(flag){
     userDTO.setAddress(user.getAddress());
     userDTO.setDateOfBirth(user.getDateOfBirth());
     userDTO.setEmployeeNumber(user.getEmployeeNumber());
-    userDTO.setBloodGroup(user.getBloodGroup().toString());
+    userDTO.setBloodGroup(user.getBloodGroup());
     userDTO.setGender(user.getGender().toString());
     return  userDTO;
 }
@@ -172,7 +179,7 @@ else{
                     userDTO.setAddress(user.getAddress());
                     userDTO.setDateOfBirth(user.getDateOfBirth());
                     userDTO.setEmployeeNumber(user.getEmployeeNumber());
-                    userDTO.setBloodGroup(user.getBloodGroup().toString());
+                    userDTO.setBloodGroup(user.getBloodGroup());
                     userDTO.setGender(user.getGender().toString());
                     return  userDTO;
                 } else {
@@ -209,7 +216,7 @@ else{
                         userDTO.setAddress(user.getAddress());
                         userDTO.setDateOfBirth(user.getDateOfBirth());
                         userDTO.setEmployeeNumber(user.getEmployeeNumber());
-                        userDTO.setBloodGroup(user.getBloodGroup().toString());
+                        userDTO.setBloodGroup(user.getBloodGroup());
                         userDTO.setGender(user.getGender().toString());
                         return  userDTO;
                     } else {

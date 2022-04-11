@@ -57,7 +57,7 @@ public class UserController {
 
 
     @PutMapping("/{userId}")
-    public ResponseEntity<UserDTO> changeDetails(@Valid @RequestBody User user, @PathVariable("userId")  String userId) throws Exception {
+    public ResponseEntity<UserDTO> changeDetails(@Valid @RequestBody User user, @PathVariable("userId")  String userId)  {
         return new ResponseEntity<>(userService.changeDetails(user,userId),HttpStatus.ACCEPTED);
     }
 

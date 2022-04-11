@@ -1,6 +1,6 @@
 package com.userservice.Model;
 
-import com.userservice.Enum.BloodGroup;
+
 import com.userservice.Enum.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -38,6 +40,7 @@ public class User {
     private String phoneNumber;
 
     @NotNull(message = "Date of Birth is required")
+
     private Date dateOfBirth;
 
     @NotNull(message = "Gender is required")
@@ -52,7 +55,8 @@ public class User {
     @NotNull(message = "Blood Group is required")
     private String  bloodGroup;
 
-
+//    @Pattern(regexp = "^[\\wA-Za-z0-9]+(?:\\.[\\wA-Za-z0-9+_-]+[A-Za-z0-9]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$",
+//            message = " enter correct email")
     @NotEmpty(message = "Email is required")
     private String email;
 

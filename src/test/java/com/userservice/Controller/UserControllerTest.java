@@ -1,8 +1,7 @@
 package com.userservice.Controller;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.userservice.Enum.BloodGroup;
+import com.userservice.Const.ConstantFile;
 import com.userservice.Enum.Gender;
 import com.userservice.Model.User;
 import com.userservice.Model.UserDTO;
@@ -15,39 +14,36 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
-
-import javax.ws.rs.core.MediaType;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
 @AutoConfigureMockMvc
 @WebMvcTest(UserController.class)
-class UserControllerTest {
+public class UserControllerTest {
 
-    @Autowired
-    private  UserController userController;
     @MockBean
     UserService userService;
+
     @Autowired
     MockMvc mockMvc;
+
 
     public static String asJsonString(final Object obj) {
         try {
@@ -57,119 +53,188 @@ class UserControllerTest {
         }
     }
 
-    private static  User createOneUser(){
-
-
-        User user= new User("1","Natsu","Igneel",
-                "Dragneel","9710532160",new Date(2022-03-21), Gender.MALE,
-                "Bhilai","123",
-                "A+","qw@ex.com","123");
-        return user;
-    }
-
-    private static  UserDTO createOneUserDto() throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date c= sdf.parse("2015-05-26");
-
-
-        UserDTO userdto= new UserDTO("1","Natsu","Igneel",
-                "Dragneel","9710532160",c, "MALE",
-                "Bhilai","123",
-                "A+","qw@ex.com");
-        return userdto;
-    }
-
-    private static  List<User> createListUser(){
-
-        List<User> users = new ArrayList<>();
-        User user= new User(null,"Natsu","Igneel",
-                "Dragneel","9710532160",new Date(2022-03-21), Gender.MALE,
-                "Bhilai","123",
-                "A+","qw@ex.com","123");
-        User user1= new User(null,"Natsu","Igneel",
-                "Dragneel","9710532160",new Date(2022-03-21), Gender.MALE,
-                "Bhilai","123",
-                "A+","qw1@ex.com","123");
-        users.add(user);
-        users.add(user1);
-        return users;
-    }
-    private static  List<UserDTO> createListDTOUser(){
-
-        List<UserDTO> users = new ArrayList<>();
-        UserDTO user= new UserDTO(null,"Natsu","Igneel",
-                "Dragneel","9710532160",new Date(2022-03-21), "MALE",
-                "Bhilai","123",
-                "A_POS","qw@ex.com");
-
-        UserDTO user1= new UserDTO(null,"fg","Igneel",
-                "Dragneel","9710532160",new Date(2022-03-21), "MALE",
-                "Bhilai","123",
-                "A_POS","qw1@ex.com");
-        users.add(user);
-        users.add(user1);
-        return users;
-    }
-
     @Test
-    void showAllUsers() throws Exception {
+    public void testGetUsers()throws Exception {
+        List<UserDTO> userDTO = createUserList();
 
+        Mockito.when(userService.showAllUsers(1, 2)).thenReturn(userDTO);
 
-//         List<User> userList= createListUser();
-         List<UserDTO> userDTOList=createListDTOUser();
-
-        Mockito.when(userService.showAllUsers(null,null)).thenReturn(userDTOList);
-
-        mockMvc.perform(get("/users"))
+        mockMvc.perform(get("/users?page=1&pageSize=2"))
                 .andDo(print())
                 .andExpect(status().isAccepted())
                 .andExpect(jsonPath("$", Matchers.hasSize(2)))
-                .andExpect(jsonPath("$[0].firstName", Matchers.is("Natsu")))
-                .andExpect(jsonPath("$[1].firstName", Matchers.is("fg")));
+                .andExpect(jsonPath("$[0].firstName", Matchers.is("firstTest")));
+    }
+
+
+
+    private List<UserDTO> createUserList() throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date c= sdf.parse("2015-05-26");
+        List<UserDTO> users = new ArrayList<>();
+
+        UserDTO user1 = new UserDTO();
+        user1.setUserID("A123A");
+        user1.setFirstName("firstTest");
+        user1.setMiddleName("J");
+        user1.setLastName("S");
+        user1.setPhoneNumber("9090909090");
+        user1.setEmail("prabhu@mail.com");
+        user1.setDateOfBirth(c);
+        user1.setEmployeeNumber("12345");
+        user1.setBloodGroup("O+");
+        user1.setGender(String.valueOf(Gender.MALE));
+        user1.setAddress("Pune");
+
+        UserDTO user2 = new UserDTO();
+        user2.setUserID("A123A");
+        user2.setFirstName("secondTest");
+        user2.setMiddleName("J");
+        user2.setLastName("S");
+        user2.setPhoneNumber("9090909090");
+        user2.setEmail("prabhu@mail.com");
+        user2.setDateOfBirth(c);
+        user2.setEmployeeNumber("12345");
+        user2.setBloodGroup("O+");
+        user2.setGender(String.valueOf(Gender.MALE));
+        user2.setAddress("Pune");
+
+        users.add(user1);
+        users.add(user2);
+        return users;
     }
 
     @Test
-    void findByID() throws Exception {
+    public void testGetUserByID() throws Exception {
+        UserDTO UserDTO = createOneUser();
 
-        UserDTO userDTO = createOneUserDto();
-        Mockito.when(userService.findByID("1")).thenReturn(userDTO);
+        Mockito.when(userService.findByID("1")).thenReturn(UserDTO);
+
         mockMvc.perform(get("/users/1"))
                 .andDo(print())
                 .andExpect(status().isAccepted())
-                .andExpect(jsonPath("$",Matchers.aMapWithSize(11)))
-                .andExpect(jsonPath("$.firstName",Matchers.is("Natsu")));
+                .andExpect(jsonPath("$", Matchers.aMapWithSize(11)))
+                .andExpect(jsonPath("$.firstName", Matchers.is("FirstID")));
     }
 
+    private UserDTO createOneUser() throws ParseException {
 
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date c= sdf.parse("2015-05-26");
+        UserDTO user1 = new UserDTO();
 
-
-
-    @Test
-    void changeDetails() {
-    }
-
-    @Test
-    void deleteUserById() throws Exception {
-//        User user =createOneUser();
-        UserDTO userDTO=createOneUserDto();
-        System.out.println("Date "+userDTO.getDateOfBirth());
-//        Mockito.when(userService.deleteUserById("1")).thenReturn("Deleted Succcessfully");
-        Mockito.when(userService.findByID("3")).thenReturn(userDTO);
-//        Mockito.when(userService.saveUser(user)).thenReturn(user);
-
-        mockMvc.perform(delete("/users/2"))
-                .andDo(print())
-                .andExpect(status().isAccepted());
+        user1.setUserID("1");
+        user1.setFirstName("FirstID");
+        user1.setMiddleName("J");
+        user1.setLastName("S");
+        user1.setPhoneNumber("9090909090");
+        user1.setEmail("prabhu@mail.com");
+        user1.setDateOfBirth(c);
+        user1.setEmployeeNumber("12345");
+        user1.setBloodGroup("O+");
+        user1.setGender(String.valueOf(Gender.MALE));
+        user1.setAddress("Pune");
+        return user1;
     }
 
     @Test
-    void userByEmail() throws Exception {
-        User user = createOneUser();
-        Mockito.when(userService.userByEmail("qw@ex.com")).thenReturn(user);
-        mockMvc.perform(get("/users/getUserByEmail/qw@ex.com"))
+    public void testGetUserByEmail() throws Exception {
+        User user = createOneUserToPost();
+
+        Mockito.when(userService.userByEmail("prabhu@mail.com")).thenReturn(user);
+
+        mockMvc.perform(get("/users/getUserByEmail/prabhu@mail.com"))
                 .andDo(print())
                 .andExpect(status().isAccepted())
-                .andExpect(jsonPath("$",Matchers.aMapWithSize(12)))
-                .andExpect(jsonPath("$.email",Matchers.is("qw@ex.com")));
+                .andExpect(jsonPath("$", Matchers.aMapWithSize(12)))
+                .andExpect(jsonPath("$.firstName", Matchers.is("Prabhu")));
     }
+
+    @Test
+    public void testDeleteUser() throws Exception {
+
+        Mockito.when(userService.deleteUserById("1")).thenReturn(ConstantFile.SUCCESSDELETE);
+
+        /*mockMvc.perform(delete("/users/1"))
+                .andDo(print());*/
+        this.mockMvc.perform(MockMvcRequestBuilders
+                        .delete("/users/1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isAccepted())
+                .andExpect(jsonPath("$",Matchers.is(ConstantFile.SUCCESSDELETE)));
+
+    }
+
+    @Test
+    public void testCreateUser() throws Exception {
+        User user = createOneUserToPost();
+
+        UserDTO userDTO = createUserDTO();
+
+        Mockito.when(userService.saveUser(user)).thenReturn(userDTO);
+        mockMvc.perform(post("/users")
+                        .content(asJsonString(user))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isAccepted())
+                .andExpect(jsonPath("$.firstName",Matchers.is("Prabhu")));
+
+    }
+
+    private UserDTO createUserDTO() throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date c= sdf.parse("2015-05-26");
+        UserDTO user = new UserDTO();
+        user.setUserID("1");
+        user.setFirstName("Prabhu");
+        user.setMiddleName("J");
+        user.setLastName("S");
+        user.setPhoneNumber("9090909090");
+        user.setEmail("prabhu@mail.com");
+        user.setEmployeeNumber("12345");
+        user.setBloodGroup("O+");
+        user.setGender(String.valueOf(Gender.MALE));
+        user.setAddress("Pune");
+        user.setDateOfBirth(c);
+
+        return user;
+    }
+
+    private User createOneUserToPost() throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date c= sdf.parse("2015-05-26");
+        User user = new User();
+        user.setUserID("1");
+        user.setFirstName("Prabhu");
+        user.setMiddleName("J");
+        user.setLastName("S");
+        user.setPhoneNumber("9090909090");
+        user.setEmail("prabhu@mail.com");
+        user.setEmployeeNumber("12345");
+        user.setBloodGroup("O+");
+        user.setGender(Gender.MALE);
+        user.setPassword("12345");
+        user.setAddress("Pune");
+        user.setDateOfBirth(c);
+
+        return user;
+    }
+
+    @Test
+    public void testUpdateUser() throws Exception {
+        User user = createOneUserToPost();
+        UserDTO userDTO =createUserDTO() ;
+
+        Mockito.when(userService.changeDetails(user, "1")).thenReturn(userDTO);
+        mockMvc.perform(put("/users/1")
+                        .content(asJsonString(user))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isAccepted())
+                .andExpect(jsonPath("$.firstName",Matchers.is("Prabhu")));
+    }
+
 }
