@@ -1,14 +1,10 @@
 package com.userservice.Model;
 
-
-import com.userservice.Enum.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -16,13 +12,12 @@ import javax.validation.constraints.Size;
 import java.util.Date;
 
 
-@Document(collection = "User")
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @ToString
-public class User {
-
+public class UserDTO {
     @Id
     private String userID;
 
@@ -40,11 +35,10 @@ public class User {
     private String phoneNumber;
 
     @NotNull(message = "Date of Birth is required")
-
     private Date dateOfBirth;
 
-    @NotNull(message = "Gender is required")
-    private Gender gender;
+    @NotEmpty(message = "Gender is required")
+    private String gender;
 
     @NotEmpty(message = "address is required")
     private String address ;
@@ -52,17 +46,11 @@ public class User {
     @NotEmpty(message = "Employee Number is required")
     private String employeeNumber;
 
-    @NotNull(message = "Blood Group is required")
-    private String  bloodGroup;
+    @NotEmpty(message = "Blood Group is required")
+    private String bloodGroup;
 
-//    @Pattern(regexp = "^[\\wA-Za-z0-9]+(?:\\.[\\wA-Za-z0-9+_-]+[A-Za-z0-9]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$",
-//            message = " enter correct email")
     @NotEmpty(message = "Email is required")
     private String email;
-
-    @NotEmpty(message = "Password is required")
-    private String password;
-
 
 
 
