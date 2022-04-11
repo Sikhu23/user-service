@@ -3,6 +3,7 @@ package com.userservice.Service;
 import com.userservice.Const.ConstantFile;
 import com.userservice.Enum.Gender;
 import com.userservice.Exception.EmailAlreadyExistsException;
+import com.userservice.Exception.EnumException;
 import com.userservice.Exception.UserNotFoundException;
 import com.userservice.Model.User;
 import com.userservice.Model.UserDTO;
@@ -71,17 +72,7 @@ class UserServiceTest {
         assertThat(savedUser.getEmail()).isEqualTo("natsu@mail.com");
     }
 
-//    @Test
-//    void testExceptionThrownWhenEmailAlreadyRegistered() throws ParseException {
-//        User user = createOneUserToCheck();
-//        User user1 = createOneUserToUpdate();
-//        User userRequest = new User();
-//
-//        when(this.userRepo.save((User) any())).thenReturn(user);
-//        when(this.userRepo.findByemail((String) any())).thenReturn(user1);
-//        assertThrows(EmailAlreadyExistsException.class, () -> this.service.saveUser(userRequest));
-//        verify(this.userRepo).findByemail((String) any());
-//    }
+
 
     @Test
     void testDeleteUserById() throws ParseException {
